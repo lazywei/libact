@@ -30,43 +30,38 @@ import os
 import urllib.request
 import random
 
-
-AUS_URL = 'https://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets/binary/australian_scale'
-AUS_SIZE = 690
-
-DB_URL = 'https://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets/binary/diabetes_scale'
-DB_SIZE = 768
-
-HT_URL = 'https://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets/binary/heart_scale'
-HT_SIZE = 270
+DATASETS = [
+    {
+        'name': 'australian',
+        'url': 'https://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets/binary/australian_scale',
+        'size': 690,
+    },
+    {
+        'name': 'diabetes',
+        'url': 'https://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets/binary/diabetes_scale',
+        'size': 768,
+    },
+    {
+        'name': 'heart',
+        'url': 'https://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets/binary/heart_scale',
+        'size': 270,
+    },
+]
 
 TARGET_PATH = os.path.dirname(os.path.realpath(__file__))
 
 
 def main():
-    print('downloading australian ...')
-    rows = list(urllib.request.urlopen(AUS_URL))
-    selected = random.sample(rows, AUS_SIZE)
-    with open(os.path.join(TARGET_PATH, 'australian.txt'), 'wb') as f:
-        for row in selected:
-            f.write(row)
-    print('australian downloaded successfully !\n')
+    for dataset in DATASETS:
+        print('downloading {} ... '.format(dataset['name']))
+        rows = list(urllib.request.urlopen(dataset['url']))
+        selected = random.sample(rows, dataset['size'])
+        with open(os.path.join(TARGET_PATH, '{}.txt'.format(dataset['name'])), 'wb') as f:
+            for row in selected:
+                f.write(row)
+        print('{} downloaded successfully !\n'.format(dataset['name']))
 
-    print('downloading diabetes ...')
-    rows = list(urllib.request.urlopen(DB_URL))
-    selected = random.sample(rows, DB_SIZE)
-    with open(os.path.join(TARGET_PATH, 'diabetes.txt'), 'wb') as f:
-        for row in selected:
-            f.write(row)
-    print('diabetes downloaded successfully !\n')
-
-    print('downloading heart ...')
-    rows = list(urllib.request.urlopen(HT_URL))
-    selected = random.sample(rows, HT_SIZE)
-    with open(os.path.join(TARGET_PATH, 'heart.txt'), 'wb') as f:
-        for row in selected:
-            f.write(row)
-    print('heart downloaded successfully !')
+    print('All datasets have been downloaded!')
 
 
 if __name__ == '__main__':
